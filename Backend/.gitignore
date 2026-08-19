@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+.env
+
+.gitattributes
+.gitignore
+HELP.md
+mvnw.cmd
+.mvn
+mvnw
