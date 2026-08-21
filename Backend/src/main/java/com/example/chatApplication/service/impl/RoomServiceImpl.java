@@ -1,16 +1,16 @@
 package com.example.chatApplication.service.impl;
 
-import com.example.chatApplication.dto.ApiResponse;
-import com.example.chatApplication.dto.CreateRoomDto;
-import com.example.chatApplication.dto.JoinRoomDto;
-import com.example.chatApplication.dto.RoomDto;
+import com.example.chatApplication.dto.*;
+import com.example.chatApplication.entity.Message;
 import com.example.chatApplication.entity.Room;
 import com.example.chatApplication.repository.RoomRepository;
 import com.example.chatApplication.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,12 +50,46 @@ public class RoomServiceImpl implements RoomService {
             return ApiResponse.failure("Room not found");
         }
 
+        List<MessageDto> messageDtos = room.getMessages().stream()
+                .map(message -> MessageDto.builder()
+                        .id(message.getId())
+                        .sender(message.getSender())
+                        .content(message.getContent())
+                        .time(MessageDto.formatTime(message.getCreatedAt()))
+                        .timestamp(message.getCreatedAt())
+                        .build())
+                .collect(Collectors.toList());
+
         JoinRoomDto dto = JoinRoomDto.builder()
                 .roomId(room.getRoomId())
-                .messages(room.getMessages())
+                .messages(messageDtos)
                 .build();
 
         return ApiResponse.success("Room details retrieved successfully", dto);
+    }
+
+    @Override
+    public ApiResponse<List<MessageDto>> getRoomMessages(String roomId) {
+
+        Room room = roomRepository.findById(roomId).orElse(null);
+
+        if (room == null) {
+            return ApiResponse.failure("Room not found");
+        }
+
+        List<Message> messages = room.getMessages();
+
+        List<MessageDto> messageDtos = messages.stream()
+                .map(message -> MessageDto.builder()
+                        .id(message.getId())
+                        .sender(message.getSender())
+                        .content(message.getContent())
+                        .time(MessageDto.formatTime(message.getCreatedAt()))
+                        .timestamp(message.getCreatedAt())
+                        .build())
+                .collect(Collectors.toList());
+
+        return ApiResponse.success("Messages retrieved successfully", messageDtos);
     }
 
 

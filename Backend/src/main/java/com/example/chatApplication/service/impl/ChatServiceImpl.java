@@ -47,10 +47,13 @@ public class ChatServiceImpl implements ChatService {
     }
 
     private MessageDto toDto(Message message) {
+        LocalDateTime time = message.getCreatedAt() != null ? message.getCreatedAt() : LocalDateTime.now();
         return MessageDto.builder()
+                .id(message.getId())
                 .sender(message.getSender())
                 .content(message.getContent())
-                .timestamp(LocalDateTime.now())
+                .time(MessageDto.formatTime(time))
+                .timestamp(time)
                 .build();
     }
 }

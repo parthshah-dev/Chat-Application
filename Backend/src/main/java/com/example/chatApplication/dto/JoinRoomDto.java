@@ -1,6 +1,5 @@
 package com.example.chatApplication.dto;
 
-import com.example.chatApplication.entity.Message;
 import lombok.*;
 
 import java.util.List;
@@ -11,8 +10,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class JoinRoomDto {
-
     private String roomId;
-    private List<Message> messages;
-
+    private List<MessageDto> messages;
 }

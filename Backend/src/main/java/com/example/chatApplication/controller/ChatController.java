@@ -14,7 +14,7 @@ public class ChatController {
 
     private final ChatService chatService;
 
-    @MessageMapping("/chat.send/{roomId}")
+    @MessageMapping("/room/{roomId}")
     public void sendMessage(@DestinationVariable String roomId,
                             @Payload MessageDto messageDto) {
         chatService.sendMessage(roomId, messageDto);

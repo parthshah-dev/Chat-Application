@@ -12,8 +12,9 @@ import {
   ShieldIcon,
   BoltIcon,
 } from "./ui/Icons";
-import { createRoomAPI } from "../services/RoomService";
+import { createRoomAPI, joinRoomAPI } from "../services/RoomService";
 import { toast } from "react-hot-toast";
+import useChatContext from "../context/ChatContext";
 
 const FeatureBadge = ({ icon: Icon, text }) => (
   <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-slate-400 sm:px-3 sm:py-1.5 sm:text-xs">
@@ -23,12 +24,16 @@ const FeatureBadge = ({ icon: Icon, text }) => (
 );
 
 const JoinCreateChat = () => {
-  const [name, setName] = useState("");
-  const [roomId, setRoomId] = useState("");
+  const [detail, setDetail] = useState({ name: "", roomId: "" });
   const [errors, setErrors] = useState({ name: "", roomId: "" });
 
+  const { roomId, setRoomId, username, setUsername, connected, setConnected } =
+    useChatContext();
+
+  const Navigate = useNavigate();
+
   const validateName = () => {
-    if (!name.trim()) {
+    if (!detail.name.trim()) {
       setErrors((prev) => ({ ...prev, name: "Name is required" }));
       return false;
     }
@@ -52,6 +57,23 @@ const JoinCreateChat = () => {
     const validRoomId = validateRoomId();
     if (validName && validRoomId) {
       setErrors({ name: "", roomId: "" });
+
+      try {
+        const room = await joinRoomAPI(roomId.trim());
+        if (room.success) {
+          toast.success("Successfully joined the room!");
+
+          setUsername(detail.name.trim());
+          setRoomId(room.data.roomId);
+          setConnected(true);
+
+          Navigate("/chat");
+        } else {
+          toast.error(room.message || "Failed to join room");
+        }
+      } catch (error) {
+        toast.error("Error joining room:", error);
+      }
     }
   };
 
@@ -62,10 +84,17 @@ const JoinCreateChat = () => {
       try {
         const response = await createRoomAPI({
           roomId: roomId.trim(),
-          name: name.trim(),
+          name: detail.name.trim(),
         });
         if (response.success) {
           toast.success("Successfully created the room!");
+
+          setUsername(detail.name.trim());
+          setRoomId(response.data.roomId);
+          setConnected(true);
+
+          Navigate("/chat");
+
           console.log(response.data);
         } else {
           toast.error(response.message || "Failed to create room");
@@ -84,12 +113,12 @@ const JoinCreateChat = () => {
 
       <div className="relative w-full max-w-sm sm:max-w-md md:max-w-lg">
         <div className="mb-5 flex flex-col items-center text-center sm:mb-8">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 text-white shadow-2xl shadow-violet-500/40 ring-1 ring-white/20 sm:h-16 sm:w-16">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br from-violet-500 via-purple-500 to-fuchsia-500 text-white shadow-2xl shadow-violet-500/40 ring-1 ring-white/20 sm:h-16 sm:w-16">
             <ChatIcon />
           </div>
           <h1 className="mt-3.5 text-2xl font-bold text-white sm:mt-5 sm:text-3xl">
             Welcome to{" "}
-            <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
               Chatly
             </span>
           </h1>
@@ -105,9 +134,9 @@ const JoinCreateChat = () => {
               label="Your Name"
               placeholder="Enter your name"
               icon={UserIcon}
-              value={name}
+              value={detail.name}
               onChange={(e) => {
-                setName(e.target.value);
+                setDetail((prev) => ({ ...prev, name: e.target.value }));
                 clearError("name");
               }}
               error={errors.name}

@@ -1,14 +1,13 @@
 package com.example.chatApplication.controller;
 
-import com.example.chatApplication.dto.ApiResponse;
-import com.example.chatApplication.dto.CreateRoomDto;
-import com.example.chatApplication.dto.JoinRoomDto;
-import com.example.chatApplication.dto.RoomDto;
+import com.example.chatApplication.dto.*;
 import com.example.chatApplication.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,5 +27,13 @@ public class RoomController {
         ApiResponse<JoinRoomDto> response = roomService.getRoomDetails(roomId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
+    @GetMapping("/{roomId}/messages")
+    public ResponseEntity<ApiResponse<List<MessageDto>>> getMessages(@PathVariable String roomId){
+        ApiResponse<List<MessageDto>> response = roomService.getRoomMessages(roomId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 
 }

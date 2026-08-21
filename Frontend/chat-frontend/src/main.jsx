@@ -4,12 +4,15 @@ import "./index.css";
 import AppRoutes from "./routes/AppRoutes.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { ChatProvider } from "./context/ChatContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <Toaster position="top-right" reverseOrder={false} />
-      <AppRoutes />
+      <ChatProvider>
+        <AppRoutes />
+      </ChatProvider>
     </BrowserRouter>
   </StrictMode>,
 );

@@ -1,7 +1,35 @@
 import Avatar from "./Avatar";
 
+const formatMessageTime = (message) => {
+  if (message.time && /^\d{1,2}:\d{2}\s?(AM|PM)$/i.test(message.time.trim())) {
+    return message.time.trim();
+  }
+
+  const rawTime = message.time || message.timestamp || message.createdAt;
+  if (!rawTime) {
+    const now = new Date();
+    let hours = now.getHours();
+    const minutes = now.getMinutes().toString().padStart(2, "0");
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12;
+    return `${hours}:${minutes} ${ampm}`;
+  }
+
+  const date = new Date(rawTime);
+  if (isNaN(date.getTime())) {
+    return String(rawTime);
+  }
+
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12 || 12;
+  return `${hours}:${minutes} ${ampm}`;
+};
+
 const MessageBubble = ({ message, isOwn, userName }) => {
   const senderName = isOwn ? "You" : message.sender;
+  const timeDisplay = formatMessageTime(message);
 
   return (
     <div className={`flex gap-2.5 sm:gap-3 ${isOwn ? "flex-row-reverse" : ""}`}>
@@ -27,11 +55,11 @@ const MessageBubble = ({ message, isOwn, userName }) => {
               : "rounded-bl-md border border-white/10 bg-white/5 text-slate-100 shadow-lg shadow-black/20"
           }`}
         >
-          {message.text}
+          {message.content}
         </div>
 
         <time className="mt-1 px-1 text-[10px] font-medium text-slate-500 sm:text-xs">
-          {message.time}
+          {timeDisplay}
         </time>
       </div>
     </div>
