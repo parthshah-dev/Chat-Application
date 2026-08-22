@@ -72,47 +72,6 @@ A high-performance, full-stack real-time chat application built with **Spring Bo
 
 ---
 
-## System Architecture
-
-```mermaid
-flowchart TD
-    subgraph Client["Frontend (React 19 + Vite)"]
-        UI[User Interface / ChatPage]
-        AxiosClient["Axios HTTP Client"]
-        StompClient["SockJS + STOMP Client"]
-    end
-
-    subgraph Server["Backend (Spring Boot 4.1.0)"]
-        RoomCtrl["RoomController (/api/rooms)"]
-        ChatCtrl["ChatController (STOMP Broker)"]
-        RoomSvc["RoomService / RoomServiceImpl"]
-        ChatSvc["ChatService / ChatServiceImpl"]
-        Broker["Spring Simple Message Broker (/topic)"]
-        Repos["RoomRepository & MessageRepository"]
-    end
-
-    subgraph Database["Database (PostgreSQL)"]
-        PG[(PostgreSQL Database)]
-    end
-
-    UI -->|REST Requests| AxiosClient
-    UI -->|WebSocket Connection| StompClient
-
-    AxiosClient -->|POST / GET Rooms| RoomCtrl
-    StompClient -->|SEND /app/room/{roomId}| ChatCtrl
-    Broker -->|SUBSCRIBE /topic/room/{roomId}| StompClient
-
-    RoomCtrl --> RoomSvc
-    ChatCtrl --> ChatSvc
-
-    ChatSvc -->|Broadcast Message| Broker
-    RoomSvc --> Repos
-    ChatSvc --> Repos
-    Repos -->|Spring Data JPA| PG
-```
-
----
-
 ## Project Structure
 
 ```text
@@ -369,8 +328,6 @@ User Types Message ──> ChatInput Component
 | Welcome / Join Room Screen | Live Chat Room Interface |
 | :---: | :---: |
 | ![Join and Create Room](screenshots/join-create-room.png) | ![Chat Room Interface](screenshots/chat-room.png) |
-
-> *Place image files in a `screenshots/` directory at the root of the repository.*
 
 ---
 
