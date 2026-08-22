@@ -17,15 +17,7 @@ A high-performance, full-stack real-time chat application built with **Spring Bo
 
 ## Demo
 
-[![Project Demo](VIDEO_THUMBNAIL_URL)](VIDEO_URL_HERE)
-
-▶️ [Watch the Project Demo](VIDEO_URL_HERE)
-
-> **Note on adding your local demo video:**
-> To link a local video file in this README:
-> 1. Upload your video (`.mp4`, `.webm`) to a GitHub Issue, Pull Request comment, or GitHub Release asset, then copy the generated video URL.
-> 2. Alternatively, host the video on platforms such as YouTube, Vimeo, or Loom.
-> 3. Replace `VIDEO_URL_HERE` with your hosted URL and `VIDEO_THUMBNAIL_URL` with a preview image (e.g., `screenshots/chat-room.png`).
+▶️ [Watch the Project Demo](screenshots/Demo.mp4)
 
 ---
 
@@ -328,17 +320,6 @@ User Types Message ──> ChatInput Component
 | Welcome / Join Room Screen | Live Chat Room Interface |
 | :---: | :---: |
 | ![Join and Create Room](screenshots/join-create-room.png) | ![Chat Room Interface](screenshots/chat-room.png) |
-
----
-
-## Future Improvements
-
-- [ ] User authentication and persistent profiles (JWT / OAuth2).
-- [ ] Direct 1-on-1 private messaging channels.
-- [ ] Typing indicators and live user presence (active online users list via WebSocket events).
-- [ ] Media and file attachment sharing.
-- [ ] Message read receipts and delivered status checkmarks.
-- [ ] Message pagination / infinite scrolling for large room histories.
 
 ---
 
