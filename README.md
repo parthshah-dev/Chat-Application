@@ -17,7 +17,9 @@ A high-performance, full-stack real-time chat application built with **Spring Bo
 
 ## Demo
 
-▶️ [Watch the Project Demo](screenshots/Demo.mp4)
+[![Project Demo](https://img.youtube.com/vi/NIcp9hE_blY/maxresdefault.jpg)](https://youtu.be/NIcp9hE_blY)
+
+▶️ [Watch the Project Demo](https://youtu.be/NIcp9hE_blY)
 
 ---
 
